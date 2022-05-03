@@ -1,18 +1,18 @@
-module OzonLogistics
+module Dashamail
   class Request
-    attr_accessor :access_token, :api_endpoint, :timeout, :open_timeout, :proxy, :faraday_adapter, :symbolize_keys, :debug, :logger, :test
+    attr_accessor :api_key, :api_endpoint, :timeout, :open_timeout, :proxy, :faraday_adapter, :symbolize_keys, :debug, :logger, :test
 
     DEFAULT_TIMEOUT = 60
     DEFAULT_OPEN_TIMEOUT = 60
 
-    def initialize(access_token: nil, api_endpoint: nil, timeout: nil, open_timeout: nil, proxy: nil, faraday_adapter: nil, symbolize_keys: false, debug: false, logger: nil, test: false)
+    def initialize(api_key: nil, api_endpoint: nil, timeout: nil, open_timeout: nil, proxy: nil, faraday_adapter: nil, symbolize_keys: false, debug: false, logger: nil, test: false)
       @path_parts = []
-      @access_token = access_token || self.class.access_token || OzonLogistics.generate_access_token.try(:dig, "access_token")
-      @access_token = @access_token.strip if @access_token
+      @api_key = api_key || self.class.api_key
+      @api_key = @api_key.strip if @api_key
       @api_endpoint = api_endpoint || self.class.api_endpoint
       @timeout = timeout || self.class.timeout || DEFAULT_TIMEOUT
       @open_timeout = open_timeout || self.class.open_timeout || DEFAULT_OPEN_TIMEOUT
-      @proxy = proxy || self.class.proxy || ENV['OZON_LOGISTICS_PROXY']
+      @proxy = proxy || self.class.proxy || ENV['DASHAMAIL_PROXY']
       @faraday_adapter = faraday_adapter || self.class.faraday_adapter || Faraday.default_adapter
       @symbolize_keys = symbolize_keys || self.class.symbolize_keys || false
       @debug = debug || self.class.debug || false
@@ -40,7 +40,7 @@ module OzonLogistics
     end
 
     def path
-      @path_parts.join('/')
+      @path_parts.join('.')
     end
 
     def create(params: nil, headers: nil, body: {})
@@ -80,10 +80,10 @@ module OzonLogistics
     end
 
     class << self
-      attr_accessor :access_token, :timeout, :open_timeout, :api_endpoint, :proxy, :faraday_adapter, :symbolize_keys, :debug, :logger, :test
+      attr_accessor :api_key, :timeout, :open_timeout, :api_endpoint, :proxy, :faraday_adapter, :symbolize_keys, :debug, :logger, :test
 
       def method_missing(sym, *args, &block)
-        new(access_token: self.access_token, api_endpoint: self.api_endpoint, timeout: self.timeout, open_timeout: self.open_timeout, faraday_adapter: self.faraday_adapter, symbolize_keys: self.symbolize_keys, debug: self.debug, proxy: self.proxy, logger: self.logger, test: self.test).send(sym, *args, &block)
+        new(api_key: self.api_key, api_endpoint: self.api_endpoint, timeout: self.timeout, open_timeout: self.open_timeout, faraday_adapter: self.faraday_adapter, symbolize_keys: self.symbolize_keys, debug: self.debug, proxy: self.proxy, logger: self.logger, test: self.test).send(sym, *args, &block)
       end
 
       def respond_to_missing?(method_name, include_private = false)

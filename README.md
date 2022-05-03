@@ -1,43 +1,80 @@
-# Dashamail
+# DashaMail
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/dashamail`. To experiment with that code, run `bin/console` for an interactive prompt.
+API wrapper для DashaMail [API](https://dashamail.ru/api/).
 
-TODO: Delete this and the text above, and describe your gem
-
-## Installation
-
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'dashamail'
-```
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
+## Установка Ruby
 
     $ gem install dashamail
 
-## Usage
+## Установка Rails
 
-TODO: Write usage instructions here
+добавьте в Gemfile:
 
-## Development
+    gem 'dashamail'
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+и запустите `bundle install`.
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+Затем:
 
-## Contributing
+    rails g dashamail:install
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/dashamail. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+## Требования
 
-## License
+Необходимо получить [api_key](https://lk.dashamail.ru/?page=account&action=integrations)
 
-The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+## Использование Rails
 
-## Code of Conduct
+В файл `config/dashamail.yml` вставьте ваши данные
 
-Everyone interacting in the Dashamail project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/dashamail/blob/master/CODE_OF_CONDUCT.md).
+## Использование Ruby
+
+Создайте экземпляр объекта `Dashamail::Request`:
+
+```ruby
+dasha = Dashamail::Request.new(api_key: 123)
+```
+
+Вы можете изменять `api_key`, `timeout`, `open_timeout`, `faraday_adapter`, `proxy`, `symbolize_keys`, `logger`, и `debug`:
+
+```ruby
+Dashamail::Request.api_key = "123"
+Dashamail::Request.timeout = 15
+Dashamail::Request.open_timeout = 15
+Dashamail::Request.symbolize_keys = true
+Dashamail::Request.debug = false
+```
+
+Либо в файле `config/initializers/dashamail.rb` для Rails.
+
+## Debug Logging
+
+Pass `debug: true` to enable debug logging to STDOUT.
+
+```ruby
+delivery = Dashamail::Request.new(api_key: "123", debug: true)
+```
+
+### Custom logger
+
+Ruby `Logger.new` is used by default, but it can be overrided using:
+
+```ruby
+delivery = Dashamail::Request.new(api_key: "123", debug: true, logger: MyLogger.new)
+```
+
+Logger can be also set by globally:
+
+```ruby
+Dashamail::Request.logger = MyLogger.new
+```
+
+## Примеры
+
+### Методы для работы с Адресными Базами
+
+#### Получаем список баз пользователя
+
+```ruby
+response = Dashamail::Request.lists.get.retrieve
+result = response.body
+```

@@ -1,12 +1,12 @@
-module OzonLogistics
+module Dashamail
   class APIRequest
 
     def initialize(builder: nil)
       @request_builder = builder
     end
 
-    def post(params: nil, headers: nil, body: {}, first_time: true)
-      validate_access_token
+    def post(params: nil, headers: nil, body: {})
+      validate_api_key
 
       begin
         response = self.rest_client.post do |request|
@@ -14,36 +14,25 @@ module OzonLogistics
         end
         parse_response(response)
       rescue StandardError => e
-        if e.response.try(:dig, :status) == 401 && first_time
-          OzonLogistics::Request.access_token = OzonLogistics.generate_access_token.try(:dig, "access_token")
-          self.post(params: params, headers: headers, body: body, first_time: false)
-        else
-          handle_error(e)
-        end
+        handle_error(e)
       end
     end
 
-    def patch(params: nil, headers: nil, body: {}, first_time: true)
-      validate_access_token
+    def patch(params: nil, headers: nil, body: {})
+      validate_api_key
 
       begin
         response = self.rest_client.patch do |request|
-          body[:senderId] = OzonLogistics.senders.first["id"] if body[:senderId].nil?
           configure_request(request: request, params: params, headers: headers, body: MultiJson.dump(body))
         end
         parse_response(response)
       rescue StandardError => e
-        if e.response.dig(:status) == 401 && first_time
-          OzonLogistics::Request.access_token = OzonLogistics.generate_access_token.try(:dig, "access_token")
-          self.patch(params: params, headers: headers, body: body, first_time: false)
-        else
-          handle_error(e)
-        end
+        handle_error(e)
       end
     end
 
-    def put(params: nil, headers: nil, body: {}, first_time: true)
-      validate_access_token
+    def put(params: nil, headers: nil, body: {})
+      validate_api_key
 
       begin
         response = self.rest_client.put do |request|
@@ -51,17 +40,12 @@ module OzonLogistics
         end
         parse_response(response)
       rescue StandardError => e
-        if e.response.dig(:status) == 401 && first_time
-          OzonLogistics::Request.access_token = OzonLogistics.generate_access_token.try(:dig, "access_token")
-          self.put(params: params, headers: headers, body: body, first_time: false)
-        else
-          handle_error(e)
-        end
+        handle_error(e)
       end
     end
 
-    def get(params: nil, headers: nil, first_time: true)
-      validate_access_token
+    def get(params: nil, headers: nil)
+      validate_api_key
 
       begin
         response = self.rest_client.get do |request|
@@ -69,17 +53,12 @@ module OzonLogistics
         end
         parse_response(response)
       rescue StandardError => e
-        if e.response.dig(:status) == 401 && first_time
-          OzonLogistics::Request.access_token = OzonLogistics.generate_access_token.try(:dig, "access_token")
-          self.get(params: params, headers: headers, first_time: false)
-        else
-          handle_error(e)
-        end
+        handle_error(e)
       end
     end
 
-    def delete(params: nil, headers: nil, first_time: true)
-      validate_access_token
+    def delete(params: nil, headers: nil)
+      validate_api_key
 
       begin
         response = self.rest_client.delete do |request|
@@ -87,12 +66,7 @@ module OzonLogistics
         end
         parse_response(response)
       rescue StandardError => e
-        if e.response.dig(:status) == 401 && first_time
-          OzonLogistics::Request.access_token = OzonLogistics.generate_access_token.try(:dig, "access_token")
-          self.delete(params: params, headers: headers, first_time: false)
-        else
-          handle_error(e)
-        end
+        handle_error(e)
       end
     end
 
@@ -100,8 +74,8 @@ module OzonLogistics
 
     # Convenience accessors
 
-    def access_token
-      @request_builder.access_token
+    def api_key
+      @request_builder.api_key
     end
 
     def api_endpoint
@@ -154,7 +128,7 @@ module OzonLogistics
       rescue MultiJson::ParseError
       end
 
-      error_to_raise = OzonError.new(error.message, error_params)
+      error_to_raise = Error.new(error.message, error_params)
 
       raise error_to_raise
     end
@@ -162,9 +136,9 @@ module OzonLogistics
     def configure_request(request: nil, params: nil, headers: nil, body: nil)
       if request
         request.params.merge!(params) if params
+        request.params.merge!({api_key: Dashamail::Request.api_key, method: @request_builder.path})
         request.headers['Content-Type'] = 'application/json'
-        request.headers['Authorization'] = "Bearer #{OzonLogistics::Request.access_token}"
-        request.headers['User-Agent'] = "OzonLogistics/#{OzonLogistics::VERSION} Ruby gem"
+        request.headers['User-Agent'] = "Dashamail/#{Dashamail::VERSION} Ruby gem"
         request.headers.merge!(headers) if headers
         request.body = body if body
         request.options.timeout = self.timeout
@@ -193,7 +167,7 @@ module OzonLogistics
           parsed_response = Response.new(headers: headers, body: body)
         rescue MultiJson::ParseError
           error_params = { title: "UNPARSEABLE_RESPONSE", status_code: 500 }
-          error = OzonError.new("Unparseable response: #{response.body}", error_params)
+          error = Error.new("Unparseable response: #{response.body}", error_params)
           raise error
         end
       end
@@ -201,18 +175,18 @@ module OzonLogistics
       parsed_response
     end
 
-    def validate_access_token
-      unless self.access_token
-        raise OzonLogistics::OzonLogisticsError, "You must set an access_token prior to making a call"
+    def validate_api_key
+      unless self.api_key
+        raise Dashamail::Error, "You must set an access_token prior to making a call"
       end
     end
 
     def api_url
-      base_api_url + @request_builder.path
+      base_api_url# + @request_builder.path
     end
 
     def base_api_url
-      "#{OzonLogistics.host}/v1/"
+      "#{Dashamail.host}/"
     end
   end
 end

@@ -1,4 +1,4 @@
-module OzonLogistics
+module Dashamail
   class Response
     attr_accessor :body, :headers
     

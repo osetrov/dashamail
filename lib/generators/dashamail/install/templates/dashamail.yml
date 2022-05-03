@@ -1,5 +1,5 @@
 defaults: &defaults
-  HOST: 'api.dashamail.com'
+  HOST: 'https://api.dashamail.com'
   API_KEY: '***'
 production:
   <<: *defaults
