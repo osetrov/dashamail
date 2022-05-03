@@ -1,0 +1,10 @@
+defaults: &defaults
+  HOST: 'api.dashamail.com'
+  API_KEY: '***'
+production:
+  <<: *defaults
+  API_KEY: '***'
+development:
+  <<: *defaults
+test:
+  <<: *defaults
