@@ -51,7 +51,7 @@ Dashamail::Request.debug = false
 Pass `debug: true` to enable debug logging to STDOUT.
 
 ```ruby
-delivery = Dashamail::Request.new(api_key: "123", debug: true)
+dasha = Dashamail::Request.new(api_key: "123", debug: true)
 ```
 
 ### Custom logger
@@ -59,7 +59,7 @@ delivery = Dashamail::Request.new(api_key: "123", debug: true)
 Ruby `Logger.new` is used by default, but it can be overrided using:
 
 ```ruby
-delivery = Dashamail::Request.new(api_key: "123", debug: true, logger: MyLogger.new)
+dasha = Dashamail::Request.new(api_key: "123", debug: true, logger: MyLogger.new)
 ```
 
 Logger can be also set by globally:
@@ -72,9 +72,12 @@ Dashamail::Request.logger = MyLogger.new
 
 ### Методы для работы с Адресными Базами
 
-#### Получаем список баз пользователя
+#### [Получаем список баз пользователя](https://dashamail.ru/api_details/?method=lists.get)
 
 ```ruby
-response = Dashamail::Request.lists.get.retrieve
+params = {
+  list_id: 0
+}
+response = Dashamail::Request.lists.get.retrieve(params: params)
 result = response.body
 ```
