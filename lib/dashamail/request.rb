@@ -43,31 +43,31 @@ module Dashamail
       @path_parts.join('.')
     end
 
-    def create(params: nil, headers: nil, body: {})
+    def create!(params: nil, headers: nil, body: {})
       APIRequest.new(builder: self).post(params: params, headers: headers, body: body)
     ensure
       reset
     end
 
-    def update(params: nil, headers: nil, body: {})
+    def update!(params: nil, headers: nil, body: {})
       APIRequest.new(builder: self).patch(params: params, headers: headers, body: body)
     ensure
       reset
     end
 
-    def upsert(params: nil, headers: nil, body: {})
+    def upsert!(params: nil, headers: nil, body: {})
       APIRequest.new(builder: self).put(params: params, headers: headers, body: body)
     ensure
       reset
     end
 
-    def retrieve(params: nil, headers: nil)
+    def retrieve!(params: nil, headers: nil)
       APIRequest.new(builder: self).get(params: params, headers: headers)
     ensure
       reset
     end
 
-    def delete(params: nil, headers: nil)
+    def delete!(params: nil, headers: nil)
       APIRequest.new(builder: self).delete(params: params, headers: headers)
     ensure
       reset

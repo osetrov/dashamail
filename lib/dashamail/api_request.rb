@@ -164,6 +164,10 @@ module Dashamail
         begin
           headers = response.headers
           body = MultiJson.load(response.body, symbolize_keys: symbolize_keys)
+          err_code = body.dig(:response, :msg, :err_code).to_i
+          if err_code > 0 && err_code != 4
+            raise Dashamail::Error, "Ошибка #{body.dig(:response, :msg, :err_code)}: #{body.dig(:response, :msg, :text)}"
+          end
           parsed_response = Response.new(headers: headers, body: body)
         rescue MultiJson::ParseError
           error_params = { title: "UNPARSEABLE_RESPONSE", status_code: 500 }

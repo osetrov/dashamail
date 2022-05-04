@@ -5,6 +5,10 @@ module Dashamail
     def initialize(body: {}, headers: {})
       @body = body
       @headers = headers
-    end 
+    end
+
+    def data
+      body.try(:dig, :response, :data)
+    end
   end
 end

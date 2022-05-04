@@ -16,6 +16,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency('faraday', '>= 0.16.0')
   s.add_dependency('multi_json', '>= 1.11.0')
+  s.add_dependency('irb', '>= 1.3.6')
 
   s.require_paths = ["lib"]
   s.required_ruby_version = '>= 2.3.8'
