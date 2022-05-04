@@ -61,7 +61,16 @@ API wrapper для DashaMail [API](https://dashamail.ru/api/).
    * [Статистика по браузерам, ОС и почтовым клиентам](#reports_clients)
    * [Статистика по регионам открытия](#reports_geo)
    * [Список событий с письмами в рамках рассылки за определенный период](#reports_events)
-
+4. [Методы для работы с Аккаунтом](#account)
+   * [Получить текущий баланс аккаунта](#account_get_balance)
+   * [Получить список всех заданных webhooks или webhook по определенному событию](#account_get_webhooks)
+   * [Обновить или добавить webhooks для событий](#account_add_webhooks)
+   * [Удаляем вебхуки для событий](#account_delete_webhooks)
+   * [Отправить письмо подтверждения обратного адреса для использования в ЛК или транзакционных рассылках](#account_confirm_from_email)
+   * [Получить список всех подтвержденных email-адресов на аккаунте](#account_get_confirmed)
+   * [Добавить домен отправки или домен статистики на аккаунт](#account_add_domain)
+   * [Получить и проверить валидность DNS-записей для настройки домена отправки или статистики](#account_check_domains)
+   * [Удаляем домен отправки или статистики](#account_delete_domain)
 
 ## <a name="install"></a> Установка
 
@@ -677,3 +686,85 @@ response = Dashamail::Request.reports.events.retrieve!(params: params)
 reports = response.data
 ```
 
+### <a name="account"></a> Методы для работы с Аккаунтом
+
+#### <a name="account_get_balance"></a> [Получить текущий баланс аккаунта](https://dashamail.ru/api_details/?method=account.get_balance)
+
+```ruby
+response = Dashamail::Request.account.get_balance.retrieve!
+result = response.data
+```
+
+#### <a name="account_get_webhooks"></a> [Получить список всех заданных webhooks или webhook по определенному событию](https://dashamail.ru/api_details/?method=account.get_webhooks)
+
+```ruby
+response = Dashamail::Request.account.get_webhooks.retrieve!
+result = response.data
+```
+
+#### <a name="account_add_webhooks"></a> [Обновить или добавить webhooks для событий](https://dashamail.ru/api_details/?method=account.add_webhooks)
+
+```ruby
+body = {
+        open: "https://example.com/webhooks/open"
+}
+response = Dashamail::Request.account.add_webhooks.create!(body: body)
+result = response.data
+```
+
+#### <a name="account_delete_webhooks"></a> [Удаляем вебхуки для событий](https://dashamail.ru/api_details/?method=account.delete_webhooks)
+
+```ruby
+body = {
+        event_name: "open"
+}
+response = Dashamail::Request.account.delete_webhooks.create!(body: body)
+result = response.data
+```
+
+#### <a name="account_confirm_from_email"></a> [Отправить письмо подтверждения обратного адреса для использования в ЛК или транзакционных рассылках](https://dashamail.ru/api_details/?method=account.confirm_from_email)
+
+```ruby
+body = {
+        email: "pavel.osetrov@me.com"
+}
+response = Dashamail::Request.account.confirm_from_email.create!(body: body)
+result = response.data
+```
+
+#### <a name="account_get_confirmed"></a> [Получить список всех подтвержденных email-адресов на аккаунте](https://dashamail.ru/api_details/?method=account.get_confirmed)
+
+```ruby
+response = Dashamail::Request.account.get_confirmed.retrieve!
+result = response.data
+```
+
+#### <a name="account_add_domain"></a> [Добавить домен отправки или домен статистики на аккаунт](https://dashamail.ru/api_details/?method=account.add_domain)
+
+```ruby
+body = {
+        domain: "example.com"
+}
+response = Dashamail::Request.account.add_domain.create!(body: body)
+result = response.data
+```
+
+#### <a name="account_check_domains"></a> [Получить и проверить валидность DNS-записей для настройки домена отправки или статистики](https://dashamail.ru/api_details/?method=account.check_domains)
+
+```ruby
+body = {
+        domain: "example.com"
+}
+response = Dashamail::Request.account.check_domains.create!(body: body)
+result = response.data
+```
+
+#### <a name="account_delete_domain"></a> [Удаляем домен отправки или статистики](https://dashamail.ru/api_details/?method=account.delete_domain)
+
+```ruby
+body = {
+        domain: "example.com"
+}
+response = Dashamail::Request.account.delete_domain.create!(body: body)
+result = response.data
+```
