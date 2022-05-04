@@ -50,6 +50,17 @@ API wrapper для DashaMail [API](https://dashamail.ru/api/).
    * [Перемещаем рассылку в папку](#campaigns_move_to_folder)
    * [Ставим рассылку на паузу](#campaigns_pause)
    * [Возобновляем поставленную на паузу рассылку](#campaigns_restart_paused)
+3. [Методы для работы с Отчетами](#reports)
+   * [Список отправленных писем в рассылке](#reports_sent)
+   * [Список доставленных писем в рассылке](#reports_delivered)
+   * [Список открытых писем в рассылке](#reports_opened)
+   * [Список писем в рассылке, где адресат перешел по любой ссылке](#reports_clicked)
+   * [Список писем отписавшихся подписчиков в рассылке](#reports_unsubscribed)
+   * [Список возвратившихся писем в рассылке](#reports_bounced)
+   * [Краткая статистка по рассылке](#reports_summary)
+   * [Статистика по браузерам, ОС и почтовым клиентам](#reports_clients)
+   * [Статистика по регионам открытия](#reports_geo)
+   * [Список событий с письмами в рамках рассылки за определенный период](#reports_events)
 
 
 ## <a name="install"></a> Установка
@@ -564,4 +575,105 @@ response = Dashamail::Request.campaigns.restart_paused.create!(body: body)
 result = response.data
 ```
 
+### <a name="reports"></a> Методы для работы с Отчетами
+
+#### <a name="reports_sent"></a> [Список отправленных писем в рассылке](https://dashamail.ru/api_details/?method=reports.sent)
+
+```ruby
+params = {
+        campaign_id: campaign_id
+}
+response = Dashamail::Request.reports.sent.retrieve!(params: params)
+reports = response.data
+```
+
+#### <a name="reports_delivered"></a> [Список доставленных писем в рассылке](https://dashamail.ru/api_details/?method=reports.delivered)
+
+```ruby
+params = {
+        campaign_id: campaign_id
+}
+response = Dashamail::Request.reports.delivered.retrieve!(params: params)
+reports = response.data
+```
+
+#### <a name="reports_opened"></a> [Список открытых писем в рассылке](https://dashamail.ru/api_details/?method=reports.opened)
+
+```ruby
+params = {
+        campaign_id: campaign_id
+}
+response = Dashamail::Request.reports.opened.retrieve!(params: params)
+reports = response.data
+```
+
+#### <a name="reports_clicked"></a> [Список писем в рассылке, где адресат перешел по любой ссылке](https://dashamail.ru/api_details/?method=reports.clicked)
+
+```ruby
+params = {
+        campaign_id: campaign_id
+}
+response = Dashamail::Request.reports.clicked.retrieve!(params: params)
+reports = response.data
+```
+
+#### <a name="reports_unsubscribed"></a> [Список писем отписавшихся подписчиков в рассылке](https://dashamail.ru/api_details/?method=reports.unsubscribed)
+
+```ruby
+params = {
+        campaign_id: campaign_id
+}
+response = Dashamail::Request.reports.unsubscribed.retrieve!(params: params)
+reports = response.data
+```
+
+#### <a name="reports_bounced"></a> [Список возвратившихся писем в рассылке](https://dashamail.ru/api_details/?method=reports.bounced)
+
+```ruby
+params = {
+        campaign_id: campaign_id
+}
+response = Dashamail::Request.reports.bounced.retrieve!(params: params)
+reports = response.data
+```
+
+#### <a name="reports_summary"></a> [Краткая статистка по рассылке](https://dashamail.ru/api_details/?method=reports.summary)
+
+```ruby
+params = {
+        campaign_id: campaign_id
+}
+response = Dashamail::Request.reports.summary.retrieve!(params: params)
+reports = response.data
+```
+
+#### <a name="reports_clients"></a> [Статистика по браузерам, ОС и почтовым клиентам](https://dashamail.ru/api_details/?method=reports.clients)
+
+```ruby
+params = {
+        campaign_id: campaign_id
+}
+response = Dashamail::Request.reports.clients.retrieve!(params: params)
+reports = response.data
+```
+
+#### <a name="reports_geo"></a> [Статистика по регионам открытия](https://dashamail.ru/api_details/?method=reports.geo)
+
+```ruby
+params = {
+        campaign_id: campaign_id
+}
+response = Dashamail::Request.reports.geo.retrieve!(params: params)
+reports = response.data
+```
+
+#### <a name="reports_events"></a> [Список событий с письмами в рамках рассылки за определенный период](https://dashamail.ru/api_details/?method=reports.events)
+
+```ruby
+params = {
+        campaign_id: campaign_id
+}
+response = Dashamail::Request.reports.events.retrieve!(params: params)
+reports = response.data
+```
 
