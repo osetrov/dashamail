@@ -166,7 +166,10 @@ module Dashamail
           body = MultiJson.load(response.body, symbolize_keys: symbolize_keys)
           err_code = body.dig(:response, :msg, :err_code).to_i
           if err_code > 0 && err_code != 4
-            raise Dashamail::Error, "Ошибка #{body.dig(:response, :msg, :err_code)}: #{body.dig(:response, :msg, :text)}"
+            err_text = body.dig(:response, :msg, :text)
+            error_params = { title: err_text, status_code: err_code }
+            error = Error.new("Ошибка #{err_code}: #{err_text}", error_params)
+            raise error
           end
           parsed_response = Response.new(headers: headers, body: body)
         rescue MultiJson::ParseError

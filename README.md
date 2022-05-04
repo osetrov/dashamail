@@ -31,7 +31,25 @@ API wrapper для DashaMail [API](https://dashamail.ru/api/).
    * [Проверяет email-адрес на валидность и наличие в черных списках или статусе отписки](#lists_check_email)
 2. [Методы для работы с Рассылками](#campaigns)
    * [Получаем список рассылок пользователя](#campaigns_get)
-   * 
+   * [Создаем рассылку](#campaigns_create)
+   * [Создаем авторассылку](#campaigns_create_auto)
+   * [Обновляем параметры рассылки](#campaigns_update)
+   * [Обновляем параметры авторассылки](#campaigns_update_auto)
+   * [Удаляем кампанию](#campaigns_delete)
+   * [Добавляем вложение](#campaigns_attach)
+   * [Удаляем приложенный файл](#campaigns_delete_attachment)
+   * [Получаем html шаблоны](#campaigns_get_templates)
+   * [Получаем шаблоны из ЛК](#campaigns_get_saved_templates)
+   * [Добавляем html шаблон](#campaigns_add_template)
+   * [Удаляем html шаблон](#campaigns_delete_template)
+   * [Принудительно вызываем срабатывание авторассылки (при этом она должна быть активна)](#campaigns_force_auto)
+   * [Создаем мультикампанию](#campaigns_multi_create)
+   * [Получаем данные о мультикампаниях](#campaigns_multi_get)
+   * [Обновляем параметры рассылок в рамках мультикампании](#campaigns_multi_update)
+   * [Получаем папки рассылок](#campaigns_get_folders)
+   * [Перемещаем рассылку в папку](#campaigns_move_to_folder)
+   * [Ставим рассылку на паузу](#campaigns_pause)
+   * [Возобновляем поставленную на паузу рассылку](#campaigns_restart_paused)
 
 
 ## <a name="install"></a> Установка
@@ -347,3 +365,203 @@ valid = response.data
 response = Dashamail::Request.campaigns.get.retrieve!
 campaigns = response.data
 ```
+
+#### <a name="campaigns_create"></a> [Создаем рассылку](https://dashamail.ru/api_details/?method=campaigns.create)
+
+```ruby
+body = {
+        list_id: list_id,
+        name: "Campaigns test"
+}
+response = Dashamail::Request.campaigns.create.create!(body: body)
+campaign_id = response.data[:campaign_id]
+```
+
+#### <a name="campaigns_create_auto"></a> [Создаем авторассылку](https://dashamail.ru/api_details/?method=campaigns.create_auto)
+
+```ruby
+body = {
+        list_id: list_id,
+        name: "Auto campaigns test"
+}
+response = Dashamail::Request.campaigns.create_auto.create!(body: body)
+campaign_id = response.data[:campaign_id]
+```
+
+#### <a name="campaigns_update"></a> [Обновляем параметры рассылки](https://dashamail.ru/api_details/?method=campaigns.update)
+
+```ruby
+body = {
+        campaign_id: campaign_id,
+        name: "Campaigns test renamed"
+}
+response = Dashamail::Request.campaigns.update.create!(body: body)
+result = response.data
+```
+
+#### <a name="campaigns_update_auto"></a> [Обновляем параметры авторассылки](https://dashamail.ru/api_details/?method=campaigns.update_auto)
+
+```ruby
+body = {
+        campaign_id: campaign_id,
+        name: "Auto campaigns test renamed"
+}
+response = Dashamail::Request.campaigns.update_auto.create!(body: body)
+result = response.data
+```
+
+#### <a name="campaigns_delete"></a> [Удаляем кампанию](https://dashamail.ru/api_details/?method=campaigns.delete)
+
+```ruby
+body = {
+        campaign_id: campaign_id
+}
+response = Dashamail::Request.campaigns.delete.create!(body: body)
+result = response.data
+```
+
+#### <a name="campaigns_attach"></a> [Добавляем вложение](https://dashamail.ru/api_details/?method=campaigns.attach)
+
+```ruby
+body = {
+        campaign_id: campaign_id,
+        file: "https://storage.deppa.ru/uploads/logo.jpg",
+        name: "logo.jpg"
+}
+response = Dashamail::Request.campaigns.attach.create!(body: body)
+attach_id = response.data[:id]
+```
+
+#### <a name="campaigns_delete_attachment"></a> [Удаляем приложенный файл](https://dashamail.ru/api_details/?method=campaigns.delete_attachment)
+
+```ruby
+body = {
+        campaign_id: campaign_id,
+        id: attach_id
+}
+response = Dashamail::Request.campaigns.delete_attachment.create!(body: body)
+result = response.data
+```
+
+#### <a name="campaigns_get_templates"></a> [Получаем html шаблоны](https://dashamail.ru/api_details/?method=campaigns.get_templates)
+
+```ruby
+response = Dashamail::Request.campaigns.get_templates.retrieve!
+templates = response.data
+```
+
+#### <a name="campaigns_get_saved_templates"></a> [Получаем шаблоны из ЛК](https://dashamail.ru/api_details/?method=campaigns.get_saved_templates)
+
+```ruby
+response = Dashamail::Request.campaigns.get_saved_templates.retrieve!
+templates = response.data
+```
+
+#### <a name="campaigns_add_template"></a> [Добавляем html шаблон](https://dashamail.ru/api_details/?method=campaigns.add_template)
+
+```ruby
+body = {
+        name: "Hello",
+        template: "<h1>Hello world!</h1>"
+}
+response = Dashamail::Request.campaigns.add_template.create!(body: body)
+template_id = response.data[:id]
+```
+
+#### <a name="campaigns_delete_template"></a> [Удаляем html шаблон](https://dashamail.ru/api_details/?method=campaigns.delete_template)
+
+```ruby
+body = {
+        id: template_id
+}
+response = Dashamail::Request.campaigns.delete_template.create!(body: body)
+result = response.data
+```
+
+#### <a name="campaigns_force_auto"></a> [Принудительно вызываем срабатывание авторассылки (при этом она должна быть активна)](https://dashamail.ru/api_details/?method=campaigns.force_auto)
+
+```ruby
+body = {
+        campaign_id: campaign_id,
+        member_id: member_id,
+        delay: 3600
+}
+response = Dashamail::Request.campaigns.force_auto.create!(body: body)
+result = response.data
+```
+
+#### <a name="campaigns_multi_create"></a> [Создаем мультикампанию](https://dashamail.ru/api_details/?method=campaigns.multi_create)
+
+```ruby
+body = {
+        data: [{
+                       list_id: list_id,
+                       name: "Campaigns test"
+               }]
+} 
+
+response = Dashamail::Request.campaigns.multi_create.create!(body: body)
+result = response.data
+```
+
+#### <a name="campaigns_multi_get"></a> [Получаем данные о мультикампаниях](https://dashamail.ru/api_details/?method=campaigns.multi_get)
+
+```ruby
+response = Dashamail::Request.campaigns.multi_get.retrieve!
+result = response.data
+```
+
+#### <a name="campaigns_multi_update"></a> [Обновляем параметры рассылок в рамках мультикампании](https://dashamail.ru/api_details/?method=campaigns.multi_update)
+
+```ruby
+body = {
+        campaign_id: campaign_id,
+        data: [{
+                       list_id: list_id,
+                       name: "Campaigns test"
+               }]
+} 
+
+response = Dashamail::Request.campaigns.multi_update.create!(body: body)
+result = response.data
+```
+
+#### <a name="campaigns_get_folders"></a> [Получаем папки рассылок](https://dashamail.ru/api_details/?method=campaigns.get_folders)
+
+```ruby
+response = Dashamail::Request.campaigns.get_folders.retrieve!
+result = response.data
+```
+
+#### <a name="campaigns_move_to_folder"></a> [Перемещаем рассылку в папку](https://dashamail.ru/api_details/?method=campaigns.move_to_folder)
+
+```ruby
+body = {
+        campaign_id: campaign_id,
+        folder_id: folder_id
+}
+response = Dashamail::Request.campaigns.move_to_folder.create!(body: body)
+result = response.data
+```
+
+#### <a name="campaigns_pause"></a> [Ставим рассылку на паузу](https://dashamail.ru/api_details/?method=campaigns.pause)
+
+```ruby
+body = {
+        campaign_id: campaign_id
+}
+response = Dashamail::Request.campaigns.pause.create!(body: body)
+result = response.data
+```
+
+#### <a name="campaigns_restart_paused"></a> [Возобновляем поставленную на паузу рассылку](https://dashamail.ru/api_details/?method=campaigns.restart_paused)
+
+```ruby
+body = {
+        campaign_id: campaign_id
+}
+response = Dashamail::Request.campaigns.restart_paused.create!(body: body)
+result = response.data
+```
+
+
