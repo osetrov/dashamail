@@ -246,7 +246,7 @@ response = Dashamail::Request.lists.add_member.create!(body: body)
 member_id = response.data[:member_id]
 ```
 
-#### <a name="lists_add_member_batch></a> [Добавляем несколько подписчиков в базу](https://dashamail.ru/api_details/?method=lists.add_member_batch)
+#### <a name="lists_add_member_batch"></a> [Добавляем несколько подписчиков в базу](https://dashamail.ru/api_details/?method=lists.add_member_batch)
 
 ```ruby
 body = {
