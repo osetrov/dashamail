@@ -19,6 +19,6 @@ Gem::Specification.new do |s|
   s.add_dependency('irb', '>= 1.3.6')
 
   s.require_paths = ["lib"]
-  s.required_ruby_version = '>= 2.3.8'
+  s.required_ruby_version = '>= 2.5'
 end
 
