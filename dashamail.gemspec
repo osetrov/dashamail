@@ -14,11 +14,10 @@ Gem::Specification.new do |s|
   s.homepage    = 'https://github.com/osetrov/dashamail'
   s.license       = 'MIT'
 
-  s.add_dependency('faraday', '>= 0.16.0')
+  s.add_dependency('faraday', '~> 1.0.0')
   s.add_dependency('multi_json', '>= 1.11.0')
   # s.add_dependency('irb', '>= 1.3.6')
 
   s.require_paths = ["lib"]
   s.required_ruby_version = '>= 2.3.4'
 end
-
