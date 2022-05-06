@@ -94,6 +94,10 @@ module Dashamail
       @request_builder.proxy
     end
 
+    def ssl_options
+      @request_builder.ssl_options
+    end
+
     def adapter
       @request_builder.faraday_adapter
     end
@@ -147,7 +151,7 @@ module Dashamail
     end
 
     def rest_client
-      client = Faraday.new(self.api_url, proxy: self.proxy, ssl: { version: "TLSv1_2" }) do |faraday|
+      client = Faraday.new(self.api_url, proxy: self.proxy, ssl: self.ssl_options) do |faraday|
         faraday.response :raise_error
         faraday.adapter adapter
         if @request_builder.debug
