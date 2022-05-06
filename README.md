@@ -106,7 +106,7 @@ API wrapper для DashaMail [API](https://dashamail.ru/api/).
 dasha = Dashamail::Request.new(api_key: 123)
 ```
 
-Вы можете изменять `api_key`, `timeout`, `open_timeout`, `faraday_adapter`, `proxy`, `symbolize_keys`, `logger`, и `debug`:
+Вы можете изменять `api_key`, `timeout`, `open_timeout`, `faraday_adapter`, `proxy`, `ssl_options`, `symbolize_keys`, `logger`, и `debug`:
 
 ```ruby
 Dashamail::Request.api_key = "123"
@@ -114,6 +114,7 @@ Dashamail::Request.timeout = 15
 Dashamail::Request.open_timeout = 15
 Dashamail::Request.symbolize_keys = true
 Dashamail::Request.debug = false
+Dashamail::Request.ssl_options = { verify: false }
 ```
 
 Либо в файле `config/initializers/dashamail.rb` для Rails.
